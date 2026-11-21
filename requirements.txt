@@ -1,0 +1,11 @@
+# Host-side tools only; use a Python 3.11+ virtual environment.
+# ESP-IDF's internal Python dependencies are managed separately by PlatformIO.
+
+# Optional CLI workflow; PlatformIO IDE for VS Code already supplies this tool.
+platformio==6.2.0
+
+# Regenerating main/tach_font_rpm.c and main/glastron_logo.c from source assets.
+Pillow==13.0.0
+
+# Standalone firmware packaging/flashing (scripts/package-firmware.py).
+esptool==4.11.0

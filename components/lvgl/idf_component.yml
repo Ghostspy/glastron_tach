@@ -1,0 +1,5 @@
+# Version metadata for the vendored LVGL core (project-adapted CMake integration).
+version: "8.3.11"
+description: "Vendored LVGL 8.3.11 core for the boat tachometer"
+license: "MIT"
+url: "https://github.com/lvgl/lvgl/tree/v8.3.11"

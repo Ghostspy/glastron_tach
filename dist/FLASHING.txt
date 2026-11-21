@@ -1,0 +1,24 @@
+Boat tachometer USB demo v0.1.1
+
+Target: Waveshare ESP32-S3-Touch-LCD-2.8C (round 480 x 480), ESP32-S3, 16 MB flash.
+DEMO readings only. Boat/engine wiring must remain disconnected. USB power only.
+The Glastron loading screen stays visible for 10 seconds before the tach appears.
+Tap the tach face to toggle brightness. The 40-second cycle includes missing readings.
+
+This combined image includes bootloader, partition table and application.
+Write it at offset 0x0 (not 0x10000). Flashing replaces the board's existing firmware.
+Use the USB TO UART connector. No flash operation has been performed by the agent.
+
+From a terminal with esptool installed (e.g. an activated ESP-IDF terminal):
+
+python -m esptool --chip esp32s3 --port YOUR_PORT write_flash 0x0 boat-tach-demo-v0.1.1.bin
+
+Select YOUR_PORT from your computer's serial-device list. If automatic download
+fails, hold BOOT, press and release RESET, then release BOOT and retry.
+After flashing, press RESET if the demo does not start automatically.
+
+The firmware compiles and its actual LVGL layout has been rendered on a computer.
+Physical screen/touch/brightness and engine measurements remain unverified.
+See the source project's README.md for source builds and hardware validation.
+
+SHA-256: 207efe29ece809988f3ee06a0395cb6a446e3a9b34780d6e425fa93a66d226f0

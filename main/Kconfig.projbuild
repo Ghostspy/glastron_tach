@@ -1,0 +1,18 @@
+menu "Boat tachometer"
+    config TACH_DEMO_MODE
+        bool "Simulate RPM and voltage (clearly marked DEMO)"
+        default y
+        help
+            No engine input circuits are configured. Disable this to display
+            unavailable readings until a real sensor provider is implemented.
+
+    config TACH_DAY_BRIGHTNESS
+        int "Day backlight percent"
+        range 10 100
+        default 100
+
+    config TACH_NIGHT_BRIGHTNESS
+        int "Night backlight percent"
+        range 1 100
+        default 20
+endmenu

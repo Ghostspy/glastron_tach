@@ -1,0 +1,13 @@
+build/
+build-host/
+sdkconfig
+sdkconfig.old
+__pycache__/
+.DS_Store
+.pio/
+sdkconfig.tach
+sdkconfig.tach.old
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+.vscode/.browse.c_cpp.db*
+.venv/
