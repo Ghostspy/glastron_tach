@@ -1,5 +1,15 @@
 # Validation — 2026-11-20
 
+## Dependency declarations — 2026-11-21
+
+- Added `requirements.txt` for the host helpers: PlatformIO 6.2.0, Pillow 13.0.0
+  and esptool 4.11.0. Checked all pins against published package metadata; Python
+  3.11 or newer is required by the Pillow pin. Fresh pip installation was not run.
+- Added native IDF application and vendored-LVGL manifests. YAML parses, the local
+  component path resolves, and LVGL's declared version matches its source header.
+- `pio run -e tach` still passes. PlatformIO continues to use the pinned SDK and
+  vendored CMake component, with no duplicate LVGL download.
+
 ## PlatformIO / VS Code support
 
 - `pio run -e tach` passes using the tracked `platformio.ini`, custom Waveshare
