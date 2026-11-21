@@ -8,6 +8,10 @@ Boat: 1986 Glastron SSV-175. Engine: Mercury 115 HP, serial 6582437, identified
 from the serial range as a 1984 inline six. Its expected six tach pulses per
 revolution still require validation when the protected engine input is added.
 
+![Demo tachometer showing 3250 RPM and 13.8 V](previews/tach-demo.png)
+
+*Host-rendered demo screen with simulated RPM and battery voltage.*
+
 ## What works in this version
 
 - A 10-second Glastron logo loading screen, then the tachometer. The countdown
