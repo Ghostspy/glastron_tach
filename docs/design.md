@@ -4,10 +4,10 @@ The boat will have two digital gauges: RPM with charging voltage, and speed with
 This iteration builds only the tachometer on the existing Waveshare
 ESP32-S3-Touch-LCD-2.8C (480 x 480). The engine interface remains pending measurements.
 
-Use ESP-IDF 5.1.5 and LVGL 8.3.11, with the vendor's ST7701S initialization sequence.
+Use ESP-IDF 5.4.4 and LVGL 8.3.11, with the vendor's ST7701S initialization sequence.
 Keep the UI independent of the board and measurements so the exact UI can render on
-the host. All LVGL calls belong to one task. Boot in clearly marked demo mode;
-disabling demo shows missing readings until a future sensor provider publishes data.
+the host. All LVGL calls belong to one task. The default build shows missing readings
+until a sensor provider publishes data. The optional demo mode labels simulated readings.
 No engine inputs, ADC channels, radios, SD card, or battery charger readings are enabled.
 
 Visual direction: a marine instrument, with a black face (#000000), off-white

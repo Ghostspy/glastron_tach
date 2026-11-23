@@ -1,4 +1,17 @@
-# Validation — 2026-11-20
+# Validation
+
+## ESP-IDF 5.4.4 migration — 2026-11-22
+
+- Built `tach` for the Waveshare ESP32-S3-Touch-LCD-2.8C with PlatformIO Core
+  6.2.0, Espressif 32 6.11.0, ESP-IDF 5.4.4 and GCC 14.2.0. The bootloader,
+  partition table and application images were produced. The post-link check
+  confirmed that the LVGL arena is in external PSRAM.
+- The package installer verified and extracted a cached copy of Espressif's
+  release ZIP. PlatformIO downloaded the matching macOS ARM toolchain packages.
+- Native ESP-IDF 5.4.4 builds passed with demo mode enabled and disabled.
+  Both passed the PSRAM placement check.
+- All 11 CTest checks and all 7 model test groups passed. No firmware was
+  flashed to the physical board.
 
 ## Dependency declarations — 2026-11-21
 

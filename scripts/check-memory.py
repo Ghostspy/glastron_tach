@@ -6,7 +6,7 @@ import subprocess
 root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("elf", type=Path, nargs="?", default=root / "build/boat_tach.elf")
-parser.add_argument("--objdump", default="xtensa-esp32s3-elf-objdump")
+parser.add_argument("--objdump", default="xtensa-esp-elf-objdump")
 args = parser.parse_args()
 symbols = subprocess.check_output([args.objdump, "-t", str(args.elf)], text=True)
 arenas = [line for line in symbols.splitlines() if line.split() and

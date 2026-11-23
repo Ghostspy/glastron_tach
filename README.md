@@ -18,15 +18,15 @@ revolution still require validation when the protected engine input is added.
   begins when the logo becomes visible; touches do not skip it. The event loop
   and watchdog continue running throughout startup.
 - 0–7000 RPM scale, blue progress arc, large numeric RPM and battery voltage.
-- Clearly marked **DEMO** mode, enabled by default. Its 40-second loop shows
+- Optional, clearly marked **DEMO** mode. Its 40-second loop shows
   stopped, idle, acceleration, cruise, deceleration, low/high voltage, and missing data.
 - Tap the tachometer face to toggle day/night brightness (100% / 20% by default).
 - Independent missing/stale readings: dashes replace invalid values or samples
   older than two seconds. Zero RPM remains a valid stopped-engine reading.
 - Actual LVGL host rendering, model tests, watchdog, and serial boot diagnostics.
 
-**No boat signal is read yet.** The screen's voltage is simulated, not a reading
-from the board's LiPo connector. There is no tach GPIO or boat-voltage ADC configured.
+**No boat signal is read yet.** Demo mode simulates voltage. The firmware has no tach GPIO,
+boat-voltage ADC, or LiPo voltage reading.
 Test this version using USB power only. Keep the boat wiring disconnected until
 the protected interface is designed and verified.
 
@@ -62,7 +62,7 @@ PlatformIO; do not install SCons separately for the PlatformIO hook scripts.
 
 ESP32 dependencies use the native ESP-IDF equivalent, `main/idf_component.yml`:
 
-- **ESP-IDF 5.1.5**, also pinned in `platformio.ini`.
+- **ESP-IDF 5.4.4**, also pinned in `platformio.ini`.
 - **LVGL 8.3.11**, referenced by local path to `components/lvgl`; its version and
   license metadata are in `components/lvgl/idf_component.yml`.
 - GPIO, I2C, SPI, LCD, timers and FreeRTOS come with ESP-IDF. Their component
@@ -75,12 +75,13 @@ standalone IDF builds when the component manager is enabled.
 ## PlatformIO in VS Code
 
 1. Install the **PlatformIO IDE** extension (`platformio.platformio-ide`) in VS Code.
-2. Use **File → Open Folder** to open this `tach` directory, containing
-   `platformio.ini`. Open the existing project rather than creating a new one.
-3. Allow PlatformIO to download its pinned toolchain on first use. This project
-   uses ESP-IDF 5.1.5; a separate ESP-IDF installation is not required. Tools and
-   Python dependencies are kept in the project's ignored `.pio/core` directory
-   so older shared SDK environments do not interfere.
+2. Use **File → Open Folder** to open the repository root containing
+   `platformio.ini`.
+3. Allow PlatformIO to download its pinned tools on first use. Espressif 32
+   6.11.0 builds with ESP-IDF 5.4.4 and GCC 14.2.0 (`esp-14.2.0_20260121`).
+   The package adapter verifies Espressif's official SDK archive and caches it
+   (about 2 GB) in `.pio/core/.cache/downloads`. PlatformIO keeps its tools and
+   Python dependencies under `.pio/core`.
 4. Select the **tach** environment in the PlatformIO status bar, then click
    **Build** (checkmark).
 5. Connect the board's **USB TO UART** Type-C port. Click **Upload** (arrow), then
@@ -94,7 +95,11 @@ You can also use **Terminal → Run Task** for the supplied PlatformIO Build,
 Upload and Monitor tasks. PlatformIO supplies IntelliSense from the actual build;
 do not enter machine-specific SDK include paths manually.
 
-Equivalent commands in the **PlatformIO Core CLI** terminal:
+Use the **PlatformIO Core CLI** terminal in VS Code for the same Core version
+as the extension. After changing SDK versions, run **PlatformIO: Rebuild C/C++
+Project Index** to refresh IntelliSense.
+
+Equivalent CLI commands:
 
 ```sh
 pio run -e tach
@@ -103,10 +108,13 @@ pio device monitor -e tach
 pio run -e tach -t menuconfig
 ```
 
-Under **Boat tachometer** in menuconfig, change demo mode and brightness. PlatformIO
-stores these settings in generated `sdkconfig.tach`, separate from the standalone
-IDF build's `sdkconfig`. The tracked `sdkconfig.defaults` seeds a new configuration.
-To return to defaults, remove `sdkconfig.tach` and clean/rebuild the `tach` environment.
+Fresh configurations take their initial settings from `sdkconfig.defaults`, which
+disables demo mode. An existing `sdkconfig.tach` keeps its saved setting. To build
+without simulated readings, run `pio run -e tach -t menuconfig`, open **Boat
+tachometer**, and clear **Simulate RPM and voltage (clearly marked DEMO)**. Save
+and exit, then run `pio run -e tach -t upload`. The gauge displays `NO DATA` until
+an engine input provider supplies readings. To restore all defaults, remove
+`sdkconfig.tach` and clean/rebuild the `tach` environment.
 
 Ports are autodetected. If multiple serial devices are connected, set `upload_port`
 and `monitor_port` in `platformio.ini`, or supply `--upload-port` / `--port` to the
@@ -127,16 +135,19 @@ and [PlatformIO VS Code tasks](https://docs.platformio.org/en/latest/integration
 
 ## Standalone ESP-IDF build and prebuilt image
 
-For a prebuilt USB demo, use `dist/boat-tach-demo-v0.1.1.zip` and its `FLASHING.txt`.
-The combined image is written at offset **0x0**; it includes all three required
-firmware segments. It has not been flashed or tested on the physical board.
+The archived USB demo at `dist/boat-tach-demo-v0.1.1.zip` was built with ESP-IDF
+5.1.5. Write the combined image at offset `0x0` as described in `FLASHING.txt`.
+Physical board testing is pending.
 
-Use **ESP-IDF 5.1.5**, an ESP32-S3 toolchain, and an activated IDF terminal.
+Use **ESP-IDF 5.4.4**, an ESP32-S3 toolchain, and an activated IDF terminal.
 LVGL 8.3.11 is included, so this project does not download a graphics library at
 build time. No SD card, wireless connection, or LiPo battery is required.
 
+The project defaults to `esp32s3`. If an existing `sdkconfig` targets `esp32`,
+back up any custom menuconfig settings and run `idf.py set-target esp32s3` once
+to regenerate the configuration for the board.
+
 ```sh
-idf.py set-target esp32s3
 idf.py build
 python3 scripts/check-memory.py
 idf.py -p /dev/cu.YOUR_PORT flash monitor
@@ -189,7 +200,7 @@ touch alignment, brightness, or sunlight readability.
 | `main/glastron_logo.c` | Official website logo rasterized into a static LVGL asset |
 | `main/tach_font_rpm.c` | Generated numeric font; no runtime font dependencies |
 
-Once the engine interface is ready, disable demo and publish measured values on
+Once the engine interface is ready, publish measured values on
 the app task using `tach_model_set_rpm(&model, rpm, now_ms)` and
 `tach_model_set_voltage(&model, volts, now_ms)` at the provider hook in `main.c`.
 If acquisition runs in another task, transfer samples through a FreeRTOS queue;
