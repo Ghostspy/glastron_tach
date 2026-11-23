@@ -2,6 +2,8 @@ build/
 build-host/
 sdkconfig
 sdkconfig.old
+# The LVGL local dependency records an absolute path in the generated lock.
+/dependencies.lock
 __pycache__/
 .DS_Store
 .pio/

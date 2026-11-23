@@ -1,0 +1,10 @@
+{
+  "name": "framework-espidf",
+  "version": "3.50404.0",
+  "description": "Official ESP-IDF 5.4.4 with PlatformIO package metadata",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/espressif/esp-idf/releases/tag/v5.4.4",
+  "scripts": {
+    "postinstall": "install.py"
+  }
+}

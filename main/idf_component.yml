@@ -1,7 +1,7 @@
 # Native ESP-IDF dependency manifest. PlatformIO pins the same SDK in platformio.ini
 # and builds the vendored LVGL component directly through CMake.
 dependencies:
-  idf: "==5.1.5"
+  idf: "==5.4.4"
   lvgl:
     version: "==8.3.11"
     path: "../components/lvgl"

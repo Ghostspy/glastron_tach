@@ -139,7 +139,7 @@ static esp_err_t panel_initialize(void)
         .clk_src = LCD_CLK_SRC_DEFAULT,
         .data_width = 16,
         .num_fbs = 1,
-        .psram_trans_align = 64,
+        .dma_burst_size = 64,
         .bounce_buffer_size_px = 480 * 10,
         .hsync_gpio_num = 38, .vsync_gpio_num = 39,
         .de_gpio_num = 40, .pclk_gpio_num = 41, .disp_gpio_num = -1,
